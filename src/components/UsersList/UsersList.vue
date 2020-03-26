@@ -1,16 +1,20 @@
 <template>
     <div class="UsersList">
+        <div class="UsersList__search">
+            <input type="text" v-model="searchField">
+            <button @click="searchHandle">search</button>
+        </div>
         <ul class="UsersList__list">
-            <li class="UsersList__list-item" v-for="user in users" :key="user.id">
+            <router-link :to="user.id.toString()" class="UsersList__list-item" v-for="user in users" :key="user.id">
                 <img class="UsersList__list-item-image" :src="user.avatar" alt="">
                 <div class="UsersList__list-item-info-block">
                     <p>{{user.first_name}}</p>
                     <p>{{user.last_name}}</p>
                     <p>{{user.email}}</p>
                 </div>
-            </li>
+            </router-link>
         </ul>
-        <div class="UsersList__pagination-block">
+        <div v-if="!searchFlag" class="UsersList__pagination-block">
             <paginate
                     :page-count="totalPages"
                     :click-handler="clickHandler"
@@ -40,7 +44,9 @@
         data() {
             return {
                 page: 1,
-                perPage: 5
+                perPage: 5,
+                searchField: '',
+                searchFlag: false
             }
         },
 
@@ -66,6 +72,11 @@
             selectChange() {
                 this.$store.commit('setPerPage', this.perPage);
                 this.$store.dispatch('fetchUsers',{page: this.page});
+            },
+
+            searchHandle() {
+                this.searchFlag = true;
+                this.$store.dispatch('fetchAndFilterUsers', this.searchField);
             }
         }
     }

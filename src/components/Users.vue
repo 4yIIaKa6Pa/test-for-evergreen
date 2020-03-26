@@ -1,14 +1,13 @@
 <template>
     <div class="Users">
-        <UsersList/>
+        <router-view></router-view>
     </div>
 </template>
 
 <script>
-    import UsersList from "./UsersList/UsersList";
+
     export default {
         name: "Users",
-        components: {UsersList}
     }
 </script>
 
